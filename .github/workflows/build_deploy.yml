@@ -14,7 +14,11 @@ jobs:
       - name: configure Buildx
         run: docker buildx create --use
       - name: Deploy Image
+        env:    
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
           docker buildx build \
             --platform linux/amd64,linux/arm64/v8 \
             -t "flyingjoe/gdal-python:3.8-ubuntu" 3.8-ubuntu/ \
