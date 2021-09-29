@@ -28,5 +28,11 @@ RUN echo 'alias pip=pip3' >> ~/.bashrc
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
 
-# This will install latest version of GDAL
-RUN pip3 install GDAL==3.0.4
+# Install Numpy from source
+RUN pip install https://github.com/numpy/numpy/archive/refs/tags/v1.21.2.tar.gz
+
+# Install Gdal
+RUN pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`    
+
+# Install other dependencies
+RUN apt update && apt install -y libwebp-dev gdal-bin && apt clean
